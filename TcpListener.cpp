@@ -3,9 +3,10 @@
 #include <string>
 #include <sstream>
 
-TcpListener::TcpListener(const char* ip_address, int port) : 
+TcpListener::TcpListener(const char* ip_address, int port): 
 	_ip_address { ip_address }, 
-	_port { port }
+	_port { port },
+	_master { }
 { }
 
 int TcpListener::init()

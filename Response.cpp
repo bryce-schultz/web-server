@@ -26,6 +26,17 @@ Response& Response::status(int status)
 	return *this;
 }
 
+Response& Response::redirect(const std::string& uri)
+{
+	std::string response = generateRedirect(RedirectType::PERMINANT, uri);
+
+	_status = 300;
+
+	_server.sendToClient(_client_socket, response.c_str(), response.size());
+
+	return *this;
+}
+
 const int Response::getStatus() const
 {
 	return _status;
@@ -55,6 +66,19 @@ std::string Response::generateResponse(const std::string& content, const std::st
 	std::string responce = generateResponseHeader(200, content.length(), content_type);
 	responce.append(content);
 	return responce;
+}
+
+std::string Response::generateRedirect(RedirectType type, const std::string& location)
+{
+	switch (type)
+	{
+	case RedirectType::TEMPORARY:
+		return ("HTTP/1.1 302: Found\r\nLocation: " + location + "\r\n\r\n");
+	case RedirectType::PERMINANT:
+		return ("HTTP/1.1 301: Moved Permanently\r\nLocation: " + location + "\r\n\r\n");
+	}
+
+	return "";
 }
 
 const std::string& Response::statusToString(int status)

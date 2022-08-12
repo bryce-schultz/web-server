@@ -15,7 +15,7 @@ int main()
 
 	app.get("/", [&](Req req, Res res)
 		{
-			res.send(HTMLGenerator::generateTag("h1", "Hello!"), "text/html");
+			res.redirect("index.html");
 		}
 	);
 
