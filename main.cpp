@@ -31,7 +31,7 @@ int main()
 		}
 	);
 
-	app.serveStatic("public/");
+	app.serve("public/");
 
 	app.run();
 

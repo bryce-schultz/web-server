@@ -27,7 +27,7 @@ public:
 
 	void get(const std::string& path, const WebCallback& callback);
 
-	void serveStatic(const std::string& path);
+	void serve(const std::string& path);
 
 protected:
 

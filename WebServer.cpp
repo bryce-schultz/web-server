@@ -29,7 +29,7 @@ void WebServer::get(const std::string& path, const WebCallback& callback)
 	_variables.emplace(base_path, dynamic_path);
 }
 
-void WebServer::serveStatic(const std::string& path)
+void WebServer::serve(const std::string& path)
 {
 	serveDirectory(path, path);
 }
