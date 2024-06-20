@@ -51,6 +51,8 @@ int TcpListener::run()
 {
 	bool running = true;
 
+	std::cout << "Web server listening on http://localhost:" << _port << "\n";
+
 	while (running)
 	{
 		fd_set copy = _master;

@@ -9,9 +9,22 @@ Response::Response(WebServer& server, int client_socket):
 	_client_socket { client_socket }
 { }
 
+Response& Response::send()
+{
+	buildResponse("", "text/plain");
+
+	_server.sendToClient(_client_socket, _stream.str().c_str(), _stream.str().size());
+
+	return *this;
+}
+
 Response& Response::send(const std::string& message, const std::string& content_type)
 {
-	_status = 200;
+	if (_status == 404)
+	{
+		_status = 200;
+	}
+
 	buildResponse(message, content_type);
 
 	_server.sendToClient(_client_socket, _stream.str().c_str(), _stream.str().size());

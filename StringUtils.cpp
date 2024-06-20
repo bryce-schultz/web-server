@@ -38,6 +38,7 @@ namespace str
 	const Pair<String, String> splitKeyValuePair(const String& source, const String& delimiter)
 	{
 		Vector<String> values = split(source, delimiter);
+		if (values.size() == 1) return { values[0], "" };
 		if (values.size() == 2) return { values[0], values[1] };
 		return { "", "" };
 	}

@@ -20,11 +20,30 @@ namespace str
 	typedef std::string String;
 	typedef size_t Size;
 	const Size NPOS = String::npos;
+	const Size START = 0;
 	template <typename T>
 	using Vector = std::vector<T>;
 
 	template <typename T1, typename T2>
 	using Pair = std::pair<T1, T2>;
+
+	template<typename T1, typename T2>
+	struct KeyValuePair
+	{
+	public:
+		const T1& key() const
+		{
+			return _key;
+		}
+
+		const T2& value() const
+		{
+			return _value;
+		}
+	private:
+		T1 _key;
+		T2 _value;
+	};
 
 	/// <summary>
 	/// Check if a string contains a substring

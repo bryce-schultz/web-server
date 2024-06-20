@@ -29,26 +29,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -143,9 +143,11 @@
     <ClInclude Include="Callback.h" />
     <ClInclude Include="ContentResolver.h" />
     <ClInclude Include="HTMLGenerator.h" />
+    <ClInclude Include="Middleware.h" />
     <ClInclude Include="MultiClientListener.h" />
     <ClInclude Include="Request.h" />
     <ClInclude Include="Response.h" />
+    <ClInclude Include="SimpleAuth.h" />
     <ClInclude Include="StringUtils.h" />
     <ClInclude Include="TcpListener.h" />
     <ClInclude Include="Thread.h" />
@@ -155,13 +157,23 @@
     <ClCompile Include="ContentResolver.cpp" />
     <ClCompile Include="HTMLGenerator.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Middleware.cpp" />
     <ClCompile Include="MultiClientListener.cpp" />
     <ClCompile Include="Request.cpp" />
     <ClCompile Include="Response.cpp" />
+    <ClCompile Include="SimpleAuth.cpp" />
     <ClCompile Include="StringUtils.cpp" />
     <ClCompile Include="TcpListener.cpp" />
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="WebServer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="public\fv5rfll5skx51.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="public\index.html" />
+    <None Include="public\profile.html" />
+    <None Include="public\signup.html" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

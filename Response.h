@@ -13,6 +13,7 @@ public:
 
 	Response(WebServer& server, int client_socket);
 
+	Response& send();
 	Response& send(const std::string& message, const std::string& content_type = "text/plain");
 	Response& status(int status);
 	Response& redirect(const std::string& uri);

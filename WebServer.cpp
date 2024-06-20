@@ -29,9 +29,30 @@ void WebServer::get(const std::string& path, const WebCallback& callback)
 	_variables.emplace(base_path, dynamic_path);
 }
 
+void WebServer::post(const std::string& path, const WebCallback& callback)
+{
+	if (!str::contains(":", path))
+	{
+		_listeners.emplace(path, callback);
+		return;
+	}
+
+	std::string base_path = str::clip(str::find(":", path), path);
+	std::string dynamic_path = str::trim(str::find(":", path) + 1, path);
+
+	_dynamicListeners.emplace(base_path, callback);
+	_variables.emplace(base_path, dynamic_path);
+}
+
 void WebServer::serve(const std::string& path)
 {
 	serveDirectory(path, path);
+}
+
+void WebServer::use(Middleware& middleware)
+{
+	middleware.init();
+	_middleware.push_back(&middleware);
 }
 
 void WebServer::onClientConnected(int client_socket)
@@ -44,11 +65,23 @@ void WebServer::onClientDisconnected(int client_socket)
 
 void WebServer::onMessageReceived(int client_socket, const char* message, int length)
 {
+	// convert message to a string.
+	std::string content = std::string(message, length);
+
+	// TODO: parseRequestedURI should return a Request with a uri inside instead, 
+	// it can then also do the parameter variables as well.
+	// rename it parseRequest
 	std::string requested_uri = parseRequestedURI(message);
-	std::string content = message;
 
 	Request req(content);
 	Response res(*this, client_socket);
+
+	removeAndAddQueryParameterVariables(requested_uri, req);
+
+	for (Middleware* middleware : _middleware)
+	{
+		middleware->request(req, res);
+	}
 
 	auto listener = _listeners.find(requested_uri);
 	if (listener != _listeners.end())
@@ -56,7 +89,7 @@ void WebServer::onMessageReceived(int client_socket, const char* message, int le
 		(*listener).second(req, res);
 	}
 
-	for (auto dyn_listener : _dynamicListeners)
+	for (auto& dyn_listener : _dynamicListeners)
 	{
 		if (str::contains(dyn_listener.first, requested_uri))
 		{
@@ -81,6 +114,57 @@ std::string WebServer::parseRequestedURI(const std::string& request)
 {
 	auto parts = str::split(request);
 	return parts[1];
+}
+
+Request WebServer::parseRequest(const std::string& message, const int length)
+{
+	// TODO: implement this.
+	return Request(message);
+}
+
+void WebServer::removeAndAddQueryParameterVariables(std::string& uri, Request& request)
+{
+	// strip the params off the uri.
+	std::string params_string = parseParams(uri);
+
+	// there were no params so return.
+	if (params_string.empty())
+	{
+		return;
+	}
+
+	// split the params.
+	auto params = str::split(params_string, "&");
+
+	// loop over the params and add them to the variables.
+	for (auto& param : params)
+	{
+		auto key_value_pair = str::splitKeyValuePair(param, "=");
+
+		// if we don't have a valid key value pair, skip to next pair.
+		if (key_value_pair.first == "") continue;
+
+		// add the key value pair to the request variables.
+		request.addVariable(key_value_pair.first, key_value_pair.second);
+	}
+}
+
+std::string WebServer::parseParams(std::string& uri)
+{
+	// check for parameters using find.
+	auto params_start = str::find("?", uri);
+
+	// if we don't find the parameter character (?), there aren't params.
+	if (params_start == str::NPOS)
+	{
+		return "";
+	}
+
+	// we might have params, remove the ? and return the params string.
+	std::string params_string = str::subString(params_start + 1, uri.length(), uri);
+	uri = str::subString(str::START, params_start, uri);
+
+	return params_string;
 }
 
 void WebServer::serveDirectory(const fs::path& path, const std::string& base_dir)
